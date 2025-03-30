@@ -1,14 +1,10 @@
 from typing import Dict, List, Tuple, Any, Optional
 from pdf2docx import Converter as PDFToDocxConverter
-import aiofiles
 from aiopath import AsyncPath
 import os
 import asyncio
-import fitz  # PyMuPDF for PDF to image conversion
-from PIL import Image
-import io
+import fitz  
 import img2pdf
-from docx2pdf import convert as docx_to_pdf
 from pptx import Presentation
 import pandas as pd
 import weasyprint
@@ -218,25 +214,11 @@ class PDFToExcelConverter(BaseConverter):
     
     async def _convert_single_file(self, pdf_path: str, output_path: str) -> None:
         """Convert a single PDF file to Excel"""
-        # Note: For accurate PDF table extraction, consider using tabula-py or camelot-py
-        # This is a simplified implementation
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(None, self._convert_sync, pdf_path, output_path)
         print(f"Converted {pdf_path} to {output_path}")
         return None
     
-    def _convert_sync(self, pdf_path: str, output_path: str) -> None:
-        """Extract tables from PDF and save to Excel"""
-        # This is a placeholder - for production use, install and use tabula-py:
-        # import tabula
-        # tables = tabula.read_pdf(pdf_path, pages='all')
-        # with pd.ExcelWriter(output_path) as writer:
-        #     for i, table in enumerate(tables):
-        #         table.to_excel(writer, sheet_name=f'Table {i+1}')
-        
-        # For now, create a simple Excel file noting this is a placeholder
-        df = pd.DataFrame({'Note': ['PDF table extraction requires specialized libraries like tabula-py or camelot-py']})
-        df.to_excel(output_path, index=False)
 
 
 class PDFToPDFAConverter(BaseConverter):
